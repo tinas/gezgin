@@ -1,0 +1,16 @@
+{
+  "name": "gezgin",
+  "version": "1.0.0",
+  "description": "passenger vehicle management from one platform",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "watch": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ahmet Tinastepe <ahmttnstpe@gmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0"
+  }
+}

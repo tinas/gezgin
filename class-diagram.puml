@@ -1,0 +1,89 @@
+@startuml gezgin
+
+enum StationType {
+  + CAR
+  + SCOOTER
+  + BIKE
+}
+
+enum BookingState{
+  + IN_PROGRESS
+  + FINISHED
+  + CANCELLED
+}
+
+interface Vehicle {
+
+}
+
+class Station <<Entity>> {
+  + name: String
+  + location: Number[]
+  + stationType: StationType
+}
+
+class Car <<Entity>> {
+  + pricePerMinute: Number
+  + brand: String
+  + model: String
+  + chargeLevel: Number
+  + lastStation: Station
+  + updateLastStation(station)
+  + printBookingHistory()
+}
+
+class Scooter <<Entity>> {
+  + pricePerMinute: Number
+  + brand: String
+  + chargeLevel: Number
+  + lastStation: Station
+  + updateLastStation(station)
+  + printBookingHistory()
+}
+
+class Bike <<Entity>> {
+  + pricePerMinute: Number
+  + brand: String
+  + lastStation: Station
+  + updateLastStation(station)
+  + printBookingHistory()
+}
+
+class Passenger <<Entity>> {
+ + name: String
+ + phone: String
+ + email: String
+ + currentBooking: Booking
+ + bookings: Booking[]
+ + creditCards: CreditCard[]
+ + book(vehicle)
+ + finishedBooking(destination)
+ + cancelBooking()
+ + printBooking(booking)
+ + printCurrentBooking()
+ + printBookingHistory()
+}
+
+class Booking <<Entity>> {
+  + vehicle: Vehicle
+  + passenger: Passenger
+  + origin: Station
+  + destination: Station
+  + status: BookingState
+}
+
+class CreditCard <<Entity>> {
+  + name: String
+  + cardNumber: String
+  + expirationMonth:Number
+  + expirationYear:Number
+  + cvv: Number
+}
+
+Passenger "1" *--> "many" CreditCard
+
+Car -up-|> Vehicle
+Scooter -up-|> Vehicle
+Bike -up-|> Vehicle
+
+@enduml
