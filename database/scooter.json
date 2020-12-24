@@ -1,0 +1,18 @@
+[[
+  "1"
+],{
+  "id": "2",
+  "pricePerMinute": 0.3,
+  "brand": "3",
+  "lastStation": "4"
+},"24d86e84-8411-45e4-be18-8f2206b95f19","Razor E300",{
+  "id": "5",
+  "name": "6",
+  "location": "7",
+  "bikeCapacity": 10,
+  "scooterCapacity": 4,
+  "carCapacity": 0
+},"ef0a845e-81b3-4e35-8e45-94cfbef1efdd","Tuzla",[
+  2,
+  0
+]]

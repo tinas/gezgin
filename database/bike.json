@@ -1,0 +1,18 @@
+[[
+  "1"
+],{
+  "id": "2",
+  "pricePerMinute": 0.1,
+  "brand": "3",
+  "lastStation": "4"
+},"4fb86a0a-141e-4a64-aad9-91c1c6d09441","Giant",{
+  "id": "5",
+  "name": "6",
+  "location": "7",
+  "bikeCapacity": 5,
+  "scooterCapacity": 0,
+  "carCapacity": 0
+},"813bcd61-8117-42b1-bb89-4c6e59f6310b","Kadıköy",[
+  0,
+  0
+]]
