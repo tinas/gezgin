@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "watch": "nodemon index.js",
+    "watch": "nodemon --ignore '*.json'",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Ahmet Tinastepe <ahmttnstpe@gmail.com>",
   "license": "ISC",
   "dependencies": {
-    "colors": "^1.4.0"
+    "colors": "^1.4.0",
+    "flatted": "^3.1.0",
+    "uuid": "^8.3.2"
   }
 }
