@@ -1,7 +1,7 @@
 const uuid = require('uuid')
 
 const Booking = require('./booking')
-const {BookingState} = require('../lib/enums')
+const {BookingState} = require('./enums')
 
 class Passenger {
   constructor(id = uuid.v4(), name, phone, email, bookings = [], currentBooking = null) {
