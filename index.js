@@ -1,17 +1,27 @@
 const {passengerDatabase, stationDatabase, scooterDatabase} = require('./database')
-const {printCurrentBooking} = require('./lib/print-booking-history')
+const {printCurrentBooking, printBookingHistory} = require('./lib/print-booking')
 const {printStations} = require('./lib/print-station')
 
-const mehmet = passengerDatabase.findByName('Mehmet')
-const scooter = scooterDatabase.findByBrand('Razor E300')
+async function main() {
+  try {
+    const mehmet = await passengerDatabase.findByName('Mehmet')
+    const scooter = await scooterDatabase.findByBrand('Razor E300')
 
-mehmet.book(scooter)
-passengerDatabase.update(mehmet)
+    mehmet.book(scooter)
 
-printCurrentBooking(mehmet)
+    await passengerDatabase.update(mehmet)
 
-console.log('------------')
+    printCurrentBooking(mehmet)
 
-const stations = stationDatabase.load()
+    const passengers = await passengerDatabase.load()
+    const stations = await stationDatabase.load()
 
-printStations(stations)
+    passengers.forEach(printBookingHistory)
+    console.log('------------------------')
+    printStations(stations)
+  } catch (e) {
+    return console.log(e)
+  }
+}
+
+main()
