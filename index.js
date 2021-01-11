@@ -1,27 +1,22 @@
-const {passengerDatabase, stationDatabase, scooterDatabase} = require('./database')
-const {printCurrentBooking, printBookingHistory} = require('./lib/print-booking')
-const {printStations} = require('./lib/print-station')
+const express = require('express')
+const bodyParser = require('body-parser')
+const indexRouter = require('./routes/index')
+const passengersRouter = require('./routes/passengers')
+const stationsRouter = require('./routes/stations')
+const bikesRouter = require('./routes/bikes')
+const scootersRouter = require('./routes/scooters')
 
-async function main() {
-  try {
-    const mehmet = await passengerDatabase.findByName('Mehmet')
-    const scooter = await scooterDatabase.findByBrand('Razor E300')
+const app = express()
+app.use(bodyParser.json())
 
-    mehmet.book(scooter)
+app.set('view engine', 'pug')
 
-    await passengerDatabase.update(mehmet)
+app.use('/', indexRouter)
+app.use('/passengers', passengersRouter)
+app.use('/stations', stationsRouter)
+app.use('/bikes', bikesRouter)
+app.use('/scooters', scootersRouter)
 
-    printCurrentBooking(mehmet)
-
-    const passengers = await passengerDatabase.load()
-    const stations = await stationDatabase.load()
-
-    passengers.forEach(printBookingHistory)
-    console.log('------------------------')
-    printStations(stations)
-  } catch (e) {
-    return console.log(e)
-  }
-}
-
-main()
+app.listen(3000, () => {
+  console.log('app listening on 3000')
+})
