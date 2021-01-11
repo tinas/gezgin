@@ -1,0 +1,7 @@
+extends layout
+block content
+  h2 Stations
+  ol
+    each station in stations
+      li
+        a(href=`/stations/${station.id}`) #{station.name}

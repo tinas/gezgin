@@ -1,0 +1,7 @@
+extends layout
+block content
+  h2 Scooters
+  ul
+    each scooter in scooters
+      li
+        a(href=`/scooters/${scooter.id}`) #{scooter.brand}

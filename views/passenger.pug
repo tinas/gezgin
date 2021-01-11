@@ -1,0 +1,15 @@
+extends layout
+block content
+  h1 #{passenger.name}
+  h3 Current Booking
+  if passenger.currentBooking
+    p Launched booking with #{passenger.currentBooking.vehicle.brand} from #{passenger.currentBooking.origin.name} station.
+  else
+    p has no current booking yet.
+  h3 Booking History
+  if passenger.bookings.length
+    ul
+      each booking in passenger.bookings
+        li From #{booking.origin.name} to #{booking.destination.name} with #{booking.vehicle.brand}
+  else
+   p  No bookings

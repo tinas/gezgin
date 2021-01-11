@@ -1,0 +1,8 @@
+extends layout
+block content
+  h2 #{station.name}
+  h3 Vehicle Capacities
+  ul
+    li Bike: #{station.bikeCapacity}
+    li Scooter: #{station.scooterCapacity}
+    li Electric Car: #{station.carCapacity}
