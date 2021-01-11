@@ -1,8 +1,13 @@
 const uuid = require('uuid')
-
 const Booking = require('./booking')
-const {BookingState} = require('./enums')
 
+const BookingState = {
+  IN_PROGRESS: 0,
+  FINISHED: 1,
+  CANCELLED: 2,
+}
+
+Object.freeze(BookingState)
 class Passenger {
   constructor(id = uuid.v4(), name, phone, email, bookings = [], currentBooking = null) {
     this.id = id
