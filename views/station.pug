@@ -1,8 +1,15 @@
 extends layout
 block content
   h2 #{station.name}
-  h3 Vehicle Capacities
-  ul
-    li Bike: #{station.bikeCapacity}
-    li Scooter: #{station.scooterCapacity}
-    li Electric Car: #{station.carCapacity}
+  h3 Parking Units
+  if station.parkingUnits.length
+    ol
+      each parkingUnit in station.parkingUnits
+        li
+          p 
+            b Code: #{parkingUnit.code}
+          p Status: #{parkingUnit.status == 0 ? "Available" : "Unavailable"}
+          p Vehicle: #{parkingUnit.vehicle.brand}
+          hr
+  else
+    p Has no Parking Units

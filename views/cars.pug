@@ -1,0 +1,7 @@
+extends layout
+block content
+  h2 Cars
+  ul
+    each car in cars
+      li
+        a(href=`/cars/${car.id}`) #{car.brand}

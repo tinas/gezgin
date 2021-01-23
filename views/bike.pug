@@ -1,8 +1,6 @@
 extends layout
 block content
-  h2 #{bike.brand}
+  h2 #{bike.code}
   ul
-    li Price Per Minute: 
-      b #{bike.pricePerMinute}
-    li Last Station: 
-      b #{bike.lastStation.name}
+    li Brand: #{bike.brand}
+    li Price Per Minute: #{bike.pricePerMinute}
