@@ -1,21 +1,9 @@
-const uuid = require('uuid')
+const mongoose = require('mongoose')
 
-class Bike {
-  constructor(id = uuid.v4(), pricePerMinute, brand, lastStation) {
-    this.id = id
+const BikeSchema = new mongoose.Schema({
+  code: {type: String, required: true, maxlength: 6},
+  brand: {type: String, required: true},
+  pricePerMinute: {type: Number, required: true, min: 0}
+})
 
-    this.pricePerMinute = pricePerMinute
-    this.brand = brand
-    this.lastStation = lastStation
-  }
-
-  updateLastStation(station) {
-    this.lastStation = station
-  }
-
-  static create({id, pricePerMinute, brand, lastStation}) {
-    return new Bike(id, pricePerMinute, brand, lastStation)
-  }
-}
-
-module.exports = Bike
+module.exports = mongoose.model('Bike', BikeSchema)

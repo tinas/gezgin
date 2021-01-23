@@ -1,48 +1,13 @@
-const uuid = require('uuid')
-const Booking = require('./booking')
+const mongoose = require('mongoose')
 
-const BookingState = {
-  IN_PROGRESS: 0,
-  FINISHED: 1,
-  CANCELLED: 2,
-}
+const PassengerSchema = new mongoose.Schema({
+  name: {type: String, required: true, minlength: 2},
+  phone: {type: String, required: true, $regex: /[0-9]/},
+  email: {type: String, required: true},
+  currentBooking: {type: mongoose.Schema.Types.ObjectId, ref: 'Booking', autopopulate: {maxDepth: 2}},
+  bookings: [{type: mongoose.Schema.Types.ObjectId, ref: 'Booking', autopopulate: {maxDepth: 2}}]
+})
 
-Object.freeze(BookingState)
-class Passenger {
-  constructor(id = uuid.v4(), name, phone, email, bookings = [], currentBooking = null) {
-    this.id = id
+PassengerSchema.plugin(require('mongoose-autopopulate'))
 
-    this.name = name
-    this.phone = phone
-    this.email = email
-    this.bookings = bookings
-    this.currentBooking = currentBooking
-  }
-
-  book(vehicle) {
-    this.currentBooking = new Booking(vehicle, this, vehicle.lastStation, null, BookingState.IN_PROGRESS)
-
-    return this.currentBooking
-  }
-
-  finishedBooking(destination) {
-    this.currentBooking.destination = destination
-    this.currentBooking.status = BookingState.FINISHED
-
-    this.bookings.push(this.currentBooking)
-
-    this.currentBooking = null
-  }
-
-  cancelBooking() {
-    this.currentBooking.status = BookingState.CANCELLED
-
-    this.bookings.push(this.currentBooking)
-  }
-
-  static create({id, name, phone, email, bookings, currentBooking}) {
-    return new Passenger(id, name, phone, email, bookings, currentBooking)
-  }
-}
-
-module.exports = Passenger
+module.exports = mongoose.model('Passenger', PassengerSchema)

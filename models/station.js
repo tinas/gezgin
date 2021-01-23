@@ -1,19 +1,11 @@
-const uuid = require('uuid')
+const mongoose = require('mongoose')
 
-class Station {
-  constructor(id = uuid.v4(), name, location, bikeCapacity = 0, scooterCapacity = 0, carCapacity = 0) {
-    this.id = id
+const StationSchema = new mongoose.Schema({
+  name: {type: String, required: true},
+  location: [{type: String}],
+  parkingUnits: [{type: mongoose.Schema.Types.ObjectId, ref: 'ParkingUnit', autopopulate: {maxDepth: 2}}]
+})
 
-    this.name = name
-    this.location = location
-    this.bikeCapacity = bikeCapacity
-    this.scooterCapacity = scooterCapacity
-    this.carCapacity = carCapacity
-  }
+StationSchema.plugin(require('mongoose-autopopulate'))
 
-  static create({id, name, location, bikeCapacity, scooterCapacity, carCapacity}) {
-    return new Station(id, name, location, bikeCapacity, scooterCapacity, carCapacity)
-  }
-}
-
-module.exports = Station
+module.exports = mongoose.model('Station', StationSchema)
