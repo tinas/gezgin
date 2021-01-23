@@ -1,0 +1,57 @@
+GET http://localhost:3000/stations HTTP/1.1
+
+###
+
+POST http://localhost:3000/passengers HTTP/1.1
+content-type: application/json
+
+{"name":"Ahmet Tınastepe", "phone":"0505110", "email":"ahmttnstpe@gmail.com"}
+
+###
+
+PATCH  http://localhost:3000/passengers/600c5d1c13048a1fb44c9f2c HTTP/1.1
+content-type: application/json
+
+{"name":"Ahmet Tınastepe"}
+
+###
+
+POST http://localhost:3000/stations HTTP/1.1
+content-type: application/json
+
+{"name":"Maltepe", "location":["10.603","15.369"]}
+
+###
+
+POST http://localhost:3000/stations/600c5b2750ff1602d039f8e6/parking-units HTTP/1.1
+content-type: application/json
+
+{"code":"707070", "state":0, "vehicleId":"600c3921c026ff0dac9bf088", "vehicleType":"Bike"}
+
+###
+
+POST http://localhost:3000/bikes HTTP/1.1
+content-type: application/json
+
+{"code":"116379", "brand":"Giant", "pricePerMinute":0.20}
+
+###
+
+POST http://localhost:3000/passengers/600c5d1c13048a1fb44c9f2c/current-booking HTTP/1.1
+content-type: application/json
+
+{"originId":"600c5b2750ff1602d039f8e6","vehicleId":"600c3921c026ff0dac9bf088", "vehicleType":"Bike"}
+
+###
+
+POST http://localhost:3000/passengers/600c5d1c13048a1fb44c9f2c/bookings HTTP/1.1
+content-type: application/json
+
+{"destinationId":"600c5b2750ff1602d039f8e6"}
+
+###
+
+PATCH http://localhost:3000/parking-units/600c3adc83777c0dc0051b3b HTTP/1.1
+content-type: application/json
+
+{"vehicleId":"600c3921c026ff0dac9bf088", "vehicleType":"Bike"}
