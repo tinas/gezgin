@@ -1,14 +1,16 @@
-const {passengerDatabase, scooterDatabase, stationDatabase} = require('../database')
+const {passengerService, bookingService} = require('../services')
 
 const router = require('express').Router()
 
 router.get('/', async (req, res) => {
-  const passengers = await passengerDatabase.load()
+  const passengers = await passengerService.load()
   res.render('passengers', {passengers})
 })
 
 router.post('/', async (req, res) => {
-  const passenger = await passengerDatabase.insert(req.body)
+  const {name, phone, email} = req.body
+
+  const passenger = await passengerService.insert({name, phone, email})
 
   res.send(passenger)
 })
@@ -16,44 +18,48 @@ router.post('/', async (req, res) => {
 router.get('/:passengerId', async (req, res) => {
   const {passengerId} = req.params
 
-  const passenger = await passengerDatabase.find(passengerId)
+  const passenger = await passengerService.find(passengerId)
   res.render('passenger', {passenger})
 })
 
 router.delete('/:passengerId', async (req, res) => {
   const {passengerId} = req.params
 
-  await passengerDatabase.removeBy('id', passengerId)
+  await passengerService.removeBy('id', passengerId)
 
   res.send('OK')
+})
+
+router.patch('/:passengerId', async (req, res) => {
+  const {passengerId} = req.params
+  const {name, phone, email} = req.body
+  const object = {}
+
+  if (name) object.name = name
+  if (phone) object.phone = phone
+  if (email) object.email = email
+
+  const passenger = await passengerService.update(passengerId, object)
+
+  res.send(passenger)
 })
 
 router.post('/:passengerId/current-booking', async (req, res) => {
   const {passengerId} = req.params
-  const {scooterId} = req.query
+  const {originId, vehicleId, vehicleType} = req.body
 
-  const passenger = await passengerDatabase.find(passengerId)
-  const scooter = await scooterDatabase.find(scooterId)
+  const booking = await bookingService.book(passengerId, originId, vehicleId, vehicleType)
 
-  passenger.book(scooter)
-
-  await passengerDatabase.update(passenger)
-
-  res.send('OK')
+  res.send(booking)
 })
 
-router.post('/:passengerId/finish-booking', async (req, res) => {
+router.post('/:passengerId/bookings', async (req, res) => {
   const {passengerId} = req.params
-  const {stationId} = req.query
+  const {destinationId} = req.body
 
-  const passenger = await passengerDatabase.find(passengerId)
-  const station = await stationDatabase.find(stationId)
+  const booking = await bookingService.finishBook(passengerId, destinationId)
 
-  passenger.finishedBooking(station)
-
-  await passengerDatabase.update(passenger)
-
-  res.send('OK')
+  res.send(booking)
 })
 
 module.exports = router

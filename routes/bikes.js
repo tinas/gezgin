@@ -1,15 +1,17 @@
-const {bikeDatabase} = require('../database')
+const {bikeService} = require('../services')
 
 const router = require('express').Router()
 
 router.get('/', async (req, res) => {
-  const bikes = await bikeDatabase.load()
+  const bikes = await bikeService.load()
 
   res.render('bikes', {bikes})
 })
 
 router.post('/', async (req, res) => {
-  const bike = await bikeDatabase.insert(req.body)
+  const {code, brand, pricePerMinute} = req.body
+
+  const bike = await bikeService.insert({code, brand, pricePerMinute})
 
   res.send(bike)
 })
@@ -17,7 +19,7 @@ router.post('/', async (req, res) => {
 router.get('/:bikeId', async (req, res) => {
   const {bikeId} = req.params
 
-  const bike = await bikeDatabase.find(bikeId)
+  const bike = await bikeService.find(bikeId)
 
   res.render('bike', {bike})
 })

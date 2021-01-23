@@ -1,15 +1,17 @@
-const {scooterDatabase} = require('../database')
+const {scooterService} = require('../services')
 
 const router = require('express').Router()
 
 router.get('/', async (req, res) => {
-  const scooters = await scooterDatabase.load()
+  const scooters = await scooterService.load()
 
   res.render('scooters', {scooters})
 })
 
 router.post('/', async (req, res) => {
-  const scooter = await scooterDatabase.insert(req.body)
+  const {code, brand, pricePerMinute} = req.body
+
+  const scooter = await scooterService.insert({code, brand, pricePerMinute})
 
   res.send(scooter)
 })
@@ -17,7 +19,7 @@ router.post('/', async (req, res) => {
 router.get('/:scooterId', async (req, res) => {
   const {scooterId} = req.params
 
-  const scooter = await scooterDatabase.find(scooterId)
+  const scooter = await scooterService.find(scooterId)
 
   res.render('scooter', {scooter})
 })
