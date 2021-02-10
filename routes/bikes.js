@@ -3,9 +3,7 @@ const {bikeService} = require('../services')
 const router = require('express').Router()
 
 router.get('/', async (req, res) => {
-  const bikes = await bikeService.load()
-
-  res.render('bikes', {bikes})
+  res.send(await bikeService.load())
 })
 
 router.post('/', async (req, res) => {
@@ -18,10 +16,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:bikeId', async (req, res) => {
   const {bikeId} = req.params
-
-  const bike = await bikeService.find(bikeId)
-
-  res.render('bike', {bike})
+  res.send(await bikeService.find(bikeId))
 })
 
 module.exports = router

@@ -3,8 +3,7 @@ const {passengerService, bookingService} = require('../services')
 const router = require('express').Router()
 
 router.get('/', async (req, res) => {
-  const passengers = await passengerService.load()
-  res.render('passengers', {passengers})
+  res.send(await passengerService.load())
 })
 
 router.post('/', async (req, res) => {
@@ -17,9 +16,7 @@ router.post('/', async (req, res) => {
 
 router.get('/:passengerId', async (req, res) => {
   const {passengerId} = req.params
-
-  const passenger = await passengerService.find(passengerId)
-  res.render('passenger', {passenger})
+  res.send(await passengerService.find(passengerId))
 })
 
 router.delete('/:passengerId', async (req, res) => {

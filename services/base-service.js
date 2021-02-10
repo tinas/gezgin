@@ -3,10 +3,6 @@ class BaseService {
     this.model = model
   }
 
-  save(objects) {
-    return this.model.insertMany(objects)
-  }
-
   load() {
     return this.model.find()
   }

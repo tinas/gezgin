@@ -13,10 +13,6 @@ const BookingState = {
 Object.freeze(BookingState)
 
 class BookingService extends BaseService {
-  async findByPassengerId(passengerId) {
-    return this.findBy('passenger', passengerId)
-  }
-
   async book(passengerId, originId, vehicleId, vehicleType) {
     const passenger = await passengerService.find(passengerId)
     const origin = await stationService.find(originId)

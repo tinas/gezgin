@@ -12,9 +12,15 @@ const State = {
 Object.freeze(State)
 
 class ParkingUnitService extends BaseService {
-  async insertToStation(code, state, stationId, vehicleId, vehicleType) {
+  async insertToStation(code, stationId, vehicleId, vehicleType) {
     const station = await stationService.find(stationId)
-    const vehicle = await vehicleService.findByIdAndType(vehicleId, vehicleType)
+    let state = State.UNAVAILABLE
+    let vehicle = null
+
+    if (vehicleId != null) {
+      vehicle = await vehicleService.findByIdAndType(vehicleId, vehicleType)
+      state = State.AVAILABLE
+    }
 
     const parkingUnit = await this.insert({code, state, station, vehicle, vehicleType})
     station.parkingUnits.push(parkingUnit)

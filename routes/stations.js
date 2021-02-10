@@ -3,8 +3,11 @@ const {stationService, parkingUnitService} = require('../services')
 const router = require('express').Router()
 
 router.get('/', async (req, res) => {
-  const stations = await stationService.load()
-  res.render('stations', {stations})
+  const {name} = req.query
+
+  if (name) return res.send(await stationService.findByName(name))
+
+  res.send(await stationService.load())
 })
 
 router.post('/', async (req, res) => {
@@ -17,25 +20,27 @@ router.post('/', async (req, res) => {
 
 router.get('/:stationId', async (req, res) => {
   const {stationId} = req.params
-
-  const station = await stationService.find(stationId)
-
-  res.render('station', {station})
+  res.send(await stationService.find(stationId))
 })
 
-router.delete('/:stationId', async (req, res) => {
+router.patch('/:stationId', async (req, res) => {
   const {stationId} = req.params
+  const {name, location} = req.body
+  const object = {}
 
-  await stationService.removeBy('id', stationId)
+  if (name) object.name = name
+  if (location) object.location = location
 
-  res.send('OK')
+  const station = await stationService.update(stationId, object)
+
+  res.send(station)
 })
 
 router.post('/:stationId/parking-units', async (req, res) => {
   const {stationId} = req.params
-  const {code, state, vehicleId, vehicleType} = req.body
+  const {code, vehicleId, vehicleType} = req.body
 
-  const parkingUnit = await parkingUnitService.insertToStation(code, state, stationId, vehicleId, vehicleType)
+  const parkingUnit = await parkingUnitService.insertToStation(code, stationId, vehicleId, vehicleType)
 
   res.send(parkingUnit)
 })
