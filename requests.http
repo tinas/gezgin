@@ -9,10 +9,10 @@ content-type: application/json
 
 ###
 
-PATCH  http://localhost:3000/passengers/600c5d1c13048a1fb44c9f2c HTTP/1.1
+PATCH  http://localhost:3000/passengers/601c0381130abf2048ecd339 HTTP/1.1
 content-type: application/json
 
-{"name":"Ahmet Tınastepe"}
+{"name":"Ahmet Tınastepe", "phone": "0505110", "email": "ahmttnstpe@gmail.com"}
 
 ###
 
@@ -26,7 +26,7 @@ content-type: application/json
 POST http://localhost:3000/stations/600c5b2750ff1602d039f8e6/parking-units HTTP/1.1
 content-type: application/json
 
-{"code":"707070", "state":0, "vehicleId":"600c3921c026ff0dac9bf088", "vehicleType":"Bike"}
+{"code":"707070", "vehicleId":"600c3921c026ff0dac9bf088", "vehicleType":"Bike"}
 
 ###
 
