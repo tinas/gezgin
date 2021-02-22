@@ -7,7 +7,7 @@
     "start": "node .bin/www",
     "watch": "nodemon --ignore '*.json' .bin/www",
     "test": "jest --coverage --verbose",
-    "test-wath": "jest --coverage --verbose --watch"
+    "test-watch": "jest --coverage --verbose --watch"
   },
   "author": "Ahmet Tinastepe <ahmttnstpe@gmail.com>",
   "license": "ISC",
