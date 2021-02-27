@@ -1,7 +1,9 @@
 const ParkingUnit = require('../models/parking-unit')
 const BaseService = require('./base-service')
-const vehicleService = require('./vehicle-service')
 const stationService = require('./station-service')
+const bikeService = require('./bike-service')
+const scooterService = require('./scooter-service')
+const carService = require('./car-service')
 
 const State = {
   AVAILABLE: 0,
@@ -11,6 +13,19 @@ const State = {
 
 Object.freeze(State)
 
+async function findVehicleByIdAndType(id, type) {
+  switch (type) {
+    case 'Bike':
+      return bikeService.find(id)
+    case 'Scooter':
+      return scooterService.find(id)
+    case 'Car':
+      return carService.find(id)
+    default:
+      return null
+  }
+}
+
 class ParkingUnitService extends BaseService {
   async insertToStation(code, stationId, vehicleId, vehicleType) {
     const station = await stationService.find(stationId)
@@ -18,7 +33,7 @@ class ParkingUnitService extends BaseService {
     let vehicle = null
 
     if (vehicleId != null) {
-      vehicle = await vehicleService.findByIdAndType(vehicleId, vehicleType)
+      vehicle = await findVehicleByIdAndType(vehicleId, vehicleType)
       state = State.AVAILABLE
     }
 
@@ -35,7 +50,7 @@ class ParkingUnitService extends BaseService {
     let state = State.UNAVAILABLE
 
     if (vehicleId != null) {
-      vehicle = await vehicleService.findByIdAndType(vehicleId, vehicleType)
+      vehicle = await findVehicleByIdAndType(vehicleId, vehicleType)
       state = State.AVAILABLE
     }
 
