@@ -13,10 +13,7 @@ export default {
   props: {
     iconName: {
       type: String,
-      required: true,
-      validator: function(value) {
-        return ['bike', 'scooter', 'car'].indexOf(value) !== -1
-      }
+      required: true
     },
     iconSize: {
       type: String,
@@ -37,9 +34,9 @@ export default {
 
 <template lang="pug">
   .icon(:style="paddingSize")
-    IconBike(v-if="iconName === 'bike'" :width="iconSize" :height="iconSize")
-    IconCar(v-else-if="iconName === 'car'" :width="iconSize" :height="iconSize")
-    IconScooter(v-else-if="iconName === 'scooter'" :width="iconSize" :height="iconSize")
+    IconBike(v-if="iconName === 'Bike'" :width="iconSize" :height="iconSize")
+    IconCar(v-else-if="iconName === 'Car'" :width="iconSize" :height="iconSize")
+    IconScooter(v-else-if="iconName === 'Scooter'" :width="iconSize" :height="iconSize")
 </template>
 
 <style lang="scss" scoped>

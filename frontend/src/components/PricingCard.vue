@@ -26,7 +26,7 @@ export default {
       type: String,
       required: true,
       validator: function(value) {
-        return ['bike', 'scooter', 'car'].indexOf(value) !== -1
+        return ['Bike', 'Scooter', 'Car'].indexOf(value) !== -1
       }
     }
   }

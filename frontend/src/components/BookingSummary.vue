@@ -23,9 +23,9 @@ export default {
     div(v-if="isLoading")
       BookingSummarySkeleton
     .booking-summary-cards(v-else)
-      BookingSummaryCard(card-title="Bike" icon-name="bike")
-      BookingSummaryCard(card-title="Scooter" icon-name="scooter")
-      BookingSummaryCard(card-title="Car" icon-name="car")
+      BookingSummaryCard(card-title="Bike")
+      BookingSummaryCard(card-title="Scooter")
+      BookingSummaryCard(card-title="Car")
 </template>
 
 <style lang="scss" scoped>

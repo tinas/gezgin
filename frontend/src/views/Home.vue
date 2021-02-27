@@ -51,9 +51,9 @@ export default {
         .icon-container
           VIcon(axis-y="50" axis-x="50" size="30" icon-name="station")
     .pricing
-      PricingCard(title="Bike" content="If you enjoy pedaling. The bike is for you." pricing="10 cents per minute." icon-name="bike")
-      PricingCard(title="Scooter" content="The scooters are powered entirely by electricity." pricing="25 cents per minute." icon-name="scooter")
-      PricingCard(title="Car" content="If you are interested in electric cars and want to have this experience." pricing="40 cents per minute." icon-name="car")
+      PricingCard(title="Bike" content="If you enjoy pedaling. The bike is for you." pricing="10 cents per minute." icon-name="Bike")
+      PricingCard(title="Scooter" content="The scooters are powered entirely by electricity." pricing="25 cents per minute." icon-name="Scooter")
+      PricingCard(title="Car" content="If you are interested in electric cars and want to have this experience." pricing="40 cents per minute." icon-name="Car")
     footer
       p gezgin ©2021 Ahmet Tınastepe
 </template>
