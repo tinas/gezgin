@@ -1,8 +1,8 @@
 const Booking = require('../models/booking')
 const BaseService = require('./base-service')
-const vehicleService = require('./vehicle-service')
 const passengerService = require('./passenger-service')
 const stationService = require('./station-service')
+const parkingUnitService = require('./parking-unit-service')
 
 const BookingState = {
   IN_PROGRESS: 0,
@@ -13,12 +13,12 @@ const BookingState = {
 Object.freeze(BookingState)
 
 class BookingService extends BaseService {
-  async book(passengerId, originId, vehicleId, vehicleType) {
+  async book(passengerId, parkingUnitId) {
     const passenger = await passengerService.find(passengerId)
-    const origin = await stationService.find(originId)
-    const vehicle = await vehicleService.findByIdAndType(vehicleId, vehicleType)
+    const parkingUnit = await parkingUnitService.find(parkingUnitId)
+    const origin = await stationService.find(parkingUnit.station._id)
 
-    const booking = await this.insert({passenger, origin, vehicle, vehicleType, state: BookingState.IN_PROGRESS})
+    const booking = await this.insert({passenger, origin, parkingUnit, state: BookingState.IN_PROGRESS})
     passenger.currentBooking = booking
 
     await passenger.save()
@@ -26,7 +26,7 @@ class BookingService extends BaseService {
     return booking
   }
 
-  async finishBook(passengerId, destinationId) {
+  async finishBook(passengerId, destinationId, totalPrice) {
     const passenger = await passengerService.find(passengerId)
     const destination = await stationService.find(destinationId)
 
@@ -37,7 +37,7 @@ class BookingService extends BaseService {
     passenger.bookings.push(booking)
     passenger.currentBooking = null
 
-    await this.update(booking._id, {destination, state: BookingState.FINISHED})
+    await this.update(booking._id, {destination, totalPrice, state: BookingState.FINISHED})
     await passenger.save()
 
     return booking
