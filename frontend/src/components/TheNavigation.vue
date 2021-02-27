@@ -14,7 +14,6 @@ export default {
     IconLogo(width="120" height="70")
     .menu
       router-link(to="/dashboard" class="menu-item") Dashboard
-      router-link(to="/station" class="menu-item") Station
     .user
       h3 Ahmet Tınastepe
       .avatar
