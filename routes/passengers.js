@@ -52,9 +52,9 @@ router.post('/:passengerId/current-booking', async (req, res) => {
 
 router.post('/:passengerId/bookings', async (req, res) => {
   const {passengerId} = req.params
-  const {destinationId} = req.body
+  const {destinationId, totalPrice} = req.body
 
-  const booking = await bookingService.finishBook(passengerId, destinationId)
+  const booking = await bookingService.finishBook(passengerId, destinationId, totalPrice)
 
   res.send(booking)
 })
