@@ -8,6 +8,11 @@ router.get('/available', async (req, res) => {
   res.send(await parkingUnitService.query(query))
 })
 
+router.get('/:parkingUnitCode', async (req, res) => {
+  const {parkingUnitCode} = req.params
+  res.send(await parkingUnitService.findBy('code', parkingUnitCode))
+})
+
 router.patch('/:parkingUnitId', async (req, res) => {
   const {parkingUnitId} = req.params
   const {vehicleId, vehicleType} = req.body
