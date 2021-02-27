@@ -15,7 +15,7 @@ export default {
     .menu
       router-link(to="/dashboard" class="menu-item") Dashboard
     .user
-      h3 Ahmet Tınastepe
+      h3(class="user-name") Ahmet Tınastepe
       .avatar
         h3 AT
 </template>
@@ -24,18 +24,35 @@ export default {
 .nav {
   display: flex;
   align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
   height: 100px;
-  padding-left: 100px;
-  padding-right: 100px;
   background: var(--white-color);
   border-bottom: 1px solid rgba(19, 56, 94, 0.1);
+
+  @media (min-width: 1280px) {
+    display: flex;
+    align-items: center;
+    height: 100px;
+    padding-left: 100px;
+    padding-right: 100px;
+    background: var(--white-color);
+    border-bottom: 1px solid rgba(19, 56, 94, 0.1);
+  }
 }
 
 .menu {
-  margin-left: 100px;
+  margin-left: 50px;
   height: 100%;
   display: flex;
   align-items: center;
+
+  @media (min-width: 1280px) {
+    margin-left: 100px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+  }
 }
 
 .menu-item {
@@ -71,6 +88,14 @@ export default {
   align-items: center;
   margin-left: auto;
   color: var(--primary-color);
+}
+
+.user-name {
+  display: none;
+
+  @media (min-width: 1280px) {
+    display: block;
+  }
 }
 
 .avatar {
