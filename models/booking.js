@@ -8,6 +8,7 @@ const BookingSchema = new mongoose.Schema({
   vehicleType: {type: String, required: true, enum: ['Bike', 'Scooter', 'Car']},
   state: {type: Number, required: true}
 })
+  {timestamps: true}
 
 BookingSchema.plugin(require('mongoose-autopopulate'))
 
