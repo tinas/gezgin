@@ -43,9 +43,9 @@ router.patch('/:passengerId', async (req, res) => {
 
 router.post('/:passengerId/current-booking', async (req, res) => {
   const {passengerId} = req.params
-  const {originId, vehicleId, vehicleType} = req.body
+  const {parkingUnitId} = req.body
 
-  const booking = await bookingService.book(passengerId, originId, vehicleId, vehicleType)
+  const booking = await bookingService.book(passengerId, parkingUnitId)
 
   res.send(booking)
 })
