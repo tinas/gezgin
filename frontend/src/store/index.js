@@ -56,10 +56,7 @@ export default new Vuex.Store({
     async fetchBookings({state, commit}) {
       const request = await axios.get(`/passengers/${state.passengerId}`)
 
-      const bookings = request.data.bookings
-      commit(Mutations.SET_BOOKING_HISTORY, bookings)
-
-      return bookings?.reverse()
+      commit(Mutations.SET_BOOKING_HISTORY, request.data.bookings)
     },
     /* eslint-disable */
     async fetchParkingUnitByCode({commit}, parkingUnitCode) {

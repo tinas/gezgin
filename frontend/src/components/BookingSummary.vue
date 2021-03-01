@@ -8,9 +8,10 @@ export default {
     BookingSummarySkeleton,
     BookingSummaryCard
   },
-  data() {
-    return {
-      isLoading: false
+  props: {
+    isLoading: {
+      type: Boolean,
+      default: true
     }
   }
 }

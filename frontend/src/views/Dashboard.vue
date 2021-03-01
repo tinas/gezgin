@@ -1,4 +1,6 @@
 <script>
+import {mapActions} from 'vuex'
+
 import TheNavigation from '@/components/TheNavigation.vue'
 import TheDashboardContainer from '@/components/TheDashboardContainer.vue'
 import CurrentBookingCard from '@/components/CurrentBookingCard.vue'
@@ -13,6 +15,18 @@ export default {
     CurrentBookingCard,
     BookingSummary,
     BookingHistoryList
+  },
+  data() {
+    return {
+      isLoading: true
+    }
+  },
+  methods: {
+    ...mapActions(['fetchBookings'])
+  },
+  async mounted() {
+    await this.fetchBookings()
+    this.isLoading = false
   }
 }
 </script>
@@ -27,9 +41,9 @@ export default {
           .bookings
             h1 Bookings
             .booking-list
-              BookingHistoryList
+              BookingHistoryList(:is-loading="isLoading")
         .sidebar
-          BookingSummary
+          BookingSummary(:is-loading="isLoading")
 </template>
 
 <style lang="scss" scoped>

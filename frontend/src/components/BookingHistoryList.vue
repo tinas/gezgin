@@ -1,5 +1,5 @@
 <script>
-import {mapActions} from 'vuex'
+import {mapState} from 'vuex'
 
 import BookingHistoryListSkeleton from '@/components/BookingHistoryListSkeleton.vue'
 import BookingHistoryListItem from '@/components/BookingHistoryListItem.vue'
@@ -10,22 +10,17 @@ export default {
     BookingHistoryListSkeleton,
     BookingHistoryListItem
   },
-  data() {
-    return {
-      isLoading: false,
-      bookings: []
+  props: {
+    isLoading: {
+      type: Boolean,
+      default: true
     }
   },
   computed: {
+    ...mapState(['bookingHistory']),
     bookingLength() {
-      return this.bookings && this.bookings.length > 0
+      return this.bookingHistory && this.bookingHistory.length > 0
     }
-  },
-  methods: {
-    ...mapActions(['fetchBookings'])
-  },
-  async mounted() {
-    this.bookings = await this.fetchBookings()
   }
 }
 </script>
@@ -35,7 +30,7 @@ export default {
     BookingHistoryListSkeleton
   .booking-history-list(v-else)
     div(class="list-wrapper" v-if="bookingLength")
-      BookingHistoryListItem(v-for="booking in bookings" :key="booking._id" :booking="booking")
+      BookingHistoryListItem(v-for="booking in bookingHistory" :key="booking._id" :booking="booking")
     h2(v-else class="no-bookings") You do not have a booking history yet 🤷
 
 </template>
