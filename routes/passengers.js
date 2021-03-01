@@ -59,4 +59,12 @@ router.post('/:passengerId/bookings', async (req, res) => {
   res.send(booking)
 })
 
+router.post('/login', async (req, res) => {
+  const {email} = req.body
+
+  const passenger = await passengerService.findBy('email', email)
+
+  res.send(passenger)
+})
+
 module.exports = router
