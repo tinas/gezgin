@@ -1,10 +1,8 @@
 # gezgin
- 
+
 Bike, Scooter and Car rental in one app
 
 <img width="500" alt="gezgin" src="https://user-images.githubusercontent.com/61799852/102913234-8a864700-448f-11eb-8823-1dd850ac08aa.png">
-
-<hr></hr>
 
 ## Project setup
 
@@ -23,7 +21,41 @@ npm start
 ```
 npm run watch
 ```
-<hr></hr>
+
+# First Usage
+
+Click on the application 'Sign Up' menu and register.
+
+## Create Booking
+
+Click on the `Start a new booking` button
+
+Enter one of the following codes in the parking unit code field and start a booking
+
+```bash
+parking unit codes
+
+bike: '101010'
+scooter: '202020'
+car: '303030'
+```
+
+## End Booking
+
+Click on the `End Booking` button
+
+Enter one of the following codes in the parking unit code field and complete a booking
+
+```bash
+parking unit codes
+
+bike: '111111'
+scooter: '222222'
+car: '333333'
+```
+
+that's it. You simulated a booking process :)
+
 
 ## Project class diagram
 
