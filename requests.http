@@ -2,6 +2,10 @@ GET http://localhost:3000/stations HTTP/1.1
 
 ###
 
+GET http://localhost:3000/passengers/603bdc4ff335f92010b5c890 HTTP/1.1
+
+###
+
 POST http://localhost:3000/passengers HTTP/1.1
 content-type: application/json
 
@@ -37,10 +41,10 @@ content-type: application/json
 
 ###
 
-POST http://localhost:3000/passengers/600c5d1c13048a1fb44c9f2c/current-booking HTTP/1.1
+POST http://localhost:3000/passengers/603bdc4ff335f92010b5c890/current-booking HTTP/1.1
 content-type: application/json
 
-{"originId":"600c5b2750ff1602d039f8e6","vehicleId":"600c3921c026ff0dac9bf088", "vehicleType":"Bike"}
+{"parkingUnitId":"603bf025f2c476231ca5dcf7"}
 
 ###
 
