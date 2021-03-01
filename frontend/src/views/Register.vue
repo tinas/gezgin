@@ -1,4 +1,6 @@
 <script>
+import {mapActions} from 'vuex'
+
 import VIcon from '@/components/VIcon.vue'
 
 import IconLogo from '@/assets/svg/logo.svg'
@@ -8,6 +10,59 @@ export default {
   components: {
     VIcon,
     IconLogo
+  },
+  data() {
+    return {
+      isValid: true,
+      name: '',
+      email: '',
+      phone: ''
+    }
+  },
+  methods: {
+    ...mapActions(['createPassenger']),
+    async submitPassenger() {
+      if (!this.name || !this.email || !this.phone) {
+        this.isValid = false
+        return
+      }
+
+      const passengerToCreate = {
+        name: this.name,
+        email: this.email,
+        phone: this.phone
+      }
+
+      await this.createPassenger(passengerToCreate)
+
+      this.$router.push('/dashboard')
+    }
+  },
+  watch: {
+    name(val) {
+      if (!val) {
+        this.isValid = false
+        return
+      }
+
+      this.isValid = true
+    },
+    email(val) {
+      if (!val) {
+        this.isValid = false
+        return
+      }
+
+      this.isValid = true
+    },
+    phone(val) {
+      if (!val) {
+        this.isValid = false
+        return
+      }
+
+      this.isValid = true
+    }
   }
 }
 </script>
@@ -24,11 +79,11 @@ export default {
         .icon-container
           VIcon(axis-y="-250" axis-x="800" size="30" icon-name="bike")
         .form
-          input(placeholder="name")
-          input(placeholder="email" type="email")
-          input(placeholder="phone" type="tel")
-          input(placeholder="password")
-          router-link(to="/dashboard" class="button") Register
+          h4(class="error-message" v-if="!isValid") Please fill all fields
+          input(placeholder="name" v-model="name")
+          input(placeholder="email" type="email" v-model="email")
+          input(placeholder="phone" type="tel" v-model="phone")
+          button(class="button" @click="submitPassenger") Register
         .question
           p Already have an account?
             router-link(to="/login" class="link") Sign In
@@ -83,6 +138,7 @@ export default {
   border: var(--border) solid var(--primary-color);
   border-radius: var(--border-radius);
   transition: var(--transition);
+  cursor: pointer;
 
   &:hover {
     background: var(--primary-color);
@@ -109,5 +165,11 @@ export default {
 
 .icon-container {
   position: absolute;
+}
+
+.error-message {
+  margin-bottom: 10px;
+  font-weight: var(--bold);
+  color: var(--red-color);
 }
 </style>
