@@ -1,10 +1,39 @@
 <script>
+import {mapState, mapActions} from 'vuex'
+
 import IconLogo from '@/assets/svg/logo.svg'
 
 export default {
   name: 'TheNavigation',
   components: {
     IconLogo
+  },
+  computed: {
+    ...mapState(['passengerName']),
+    avatarText() {
+      const nameSplit = this.passengerName.split(' ')
+      let firstCharacter = ''
+      let secondCharacter = ''
+
+      switch (nameSplit.length) {
+        case 1:
+          return nameSplit[0].substring(0, 1).toUpperCase()
+        case 2:
+          firstCharacter = nameSplit[0].substring(0, 1).toUpperCase()
+          secondCharacter = nameSplit[1].substring(0, 1).toUpperCase()
+          return firstCharacter + secondCharacter
+        default:
+          return '?'
+      }
+    }
+  },
+  methods: {
+    ...mapActions(['logout']),
+    submitLogin() {
+      this.logout()
+
+      this.$router.push('/')
+    }
   }
 }
 </script>
@@ -15,9 +44,10 @@ export default {
     .menu
       router-link(to="/dashboard" class="menu-item") Dashboard
     .user
-      h3(class="user-name") Ahmet Tınastepe
+      h3(class="user-name") {{passengerName}}
       .avatar
-        h3 AT
+        h3 {{avatarText}}
+      button(class="logout" @click="submitLogin") Logout
 </template>
 
 <style lang="scss" scoped>
@@ -111,5 +141,19 @@ export default {
 
 h3 {
   font-weight: var(--bold);
+}
+
+.logout {
+  margin-left: 30px;
+  padding: 10px;
+  border: var(--border) solid var(--primary-color);
+  border-radius: var(--border-radius);
+  transition: var(--transition);
+  cursor: pointer;
+
+  &:hover {
+    color: var(--red-color);
+    border-color: var(--red-color);
+  }
 }
 </style>
