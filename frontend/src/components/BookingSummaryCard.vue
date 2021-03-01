@@ -1,4 +1,5 @@
 <script>
+import {mapState} from 'vuex'
 import VIconStroke from '@/components/VIconStroke.vue'
 
 export default {
@@ -13,15 +14,22 @@ export default {
       validator: function(value) {
         return ['Bike', 'Scooter', 'Car'].indexOf(value) !== -1
       }
+    }
+  },
+  computed: {
+    ...mapState(['bookingHistory']),
+    sumTotalPrice() {
+      return this.sumBookingHistoryByPrice()
     },
-    totalBooking: {type: Number, default: 0},
-    totalAmount: {type: Number, default: 0},
-    iconName: {
-      type: String,
-      required: true,
-      validator: function(value) {
-        return ['bike', 'scooter', 'car'].indexOf(value) !== -1
-      }
+    sumTotalBookings() {
+      return this.bookingHistory?.filter(o => o.parkingUnit.vehicleType == this.cardTitle).length
+    }
+  },
+  methods: {
+    sumBookingHistoryByPrice() {
+      return this.bookingHistory
+        ?.filter(o => o.parkingUnit.vehicleType == this.cardTitle)
+        .reduce((sum, item) => sum + item.totalPrice, 0)
     }
   }
 }
@@ -33,12 +41,12 @@ export default {
         h1 {{cardTitle}}
         .total
           h3(class="title") Total Booking:
-          h3(class="value") {{totalBooking}}
+          h3(class="value") {{sumTotalBookings}}
         .total
-          h3(class="title") Total Amount:
-          h3(class="value") {{totalAmount}}$
+          h3(class="title") Total Price:
+          h3(class="value") ${{sumTotalPrice}}
       .image-wrapper
-        VIconStroke(:icon-name="iconName" icon-size="50" class="icon-container")
+        VIconStroke(:icon-name="cardTitle" icon-size="50" class="icon-container")
 </template>
 
 <style lang="scss" scoped>
