@@ -1,4 +1,7 @@
 <script>
+import {mapState, mapActions} from 'vuex'
+import {formatDistanceToNowStrict} from 'date-fns'
+
 import CurrentBookingCardSkeleton from '@/components/CurrentBookingCardSkeleton.vue'
 import VIconForCard from '@/components/VIconForCard.vue'
 
@@ -13,9 +16,40 @@ export default {
   },
   data() {
     return {
-      isLoading: false,
-      currentBooking: true
+      isLoading: true,
+      currentBooking: null,
+      vehicle: null,
+      timeAgo: 0,
+      price: 0
     }
+  },
+  computed: {
+    ...mapState(['originParkingUnit'])
+  },
+  methods: {
+    ...mapActions(['fetchCurrentBooking']),
+
+    pricingRefresh() {
+      const createdAt = new Date(this.currentBooking.createdAt)
+      this.timeAgo = formatDistanceToNowStrict(createdAt, {unit: 'minute'})
+      const calculatePrice = this.timeAgo.split(' ')[0] * this.vehicle.pricePerMinute
+      this.price = calculatePrice.toFixed(2)
+    }
+  },
+  async mounted() {
+    this.currentBooking = await this.fetchCurrentBooking()
+
+    this.isLoading = false
+
+    if (!this.currentBooking) return
+
+    this.vehicle = this.originParkingUnit.vehicle
+
+    this.pricingRefresh()
+
+    setInterval(() => {
+      this.pricingRefresh()
+    }, 60000)
   }
 }
 </script>
@@ -26,23 +60,23 @@ export default {
   .current-booking(v-else)
     div(v-if="currentBooking")
       .header
-        VIconForCard(icon-name="bike" class="vehicle" size="60")
+        VIconForCard(:icon-name="currentBooking.parkingUnit.vehicleType" class="vehicle" size="60")
         .pricing
-          h3 Amount:
-            span 5$
-          h3 Time:
-            span 10 minutes
-        h4(class="parking-unit-code") Platform Code:
-          span #546698
+          h3 Price:
+            span ${{price}}
+          h3 Elapsed Time:
+            span {{timeAgo}}
+        h4(class="parking-unit-code") Parking Unit Code:
+          span # {{currentBooking.parkingUnit.code}}
       .content
         .content-text
-          h1 Razor E300
-          h3 You started a booking from Kadıköy station
+          h1 {{vehicle.brand}}
+          h3 You started a booking from {{currentBooking.origin.name}} station
         router-link(to="/booking-end" class="end-booking-button") End Booking
           IconPlaceholder(class="button-image")
     .no-booking(v-else)
       h1 Has no current booking yet
-      router-link(to="/booking-start" class="start-booking-button") Start a new booking 
+      router-link(to="/booking-start" class="start-booking-button") Start a new booking
 </template>
 
 <style lang="scss" scoped>
@@ -103,7 +137,7 @@ export default {
     > span {
       font-weight: var(--bold);
       color: var(--white-color);
-      margin-left: 20px;
+      margin-left: 10px;
     }
   }
 }
@@ -140,7 +174,6 @@ export default {
 
   &:hover {
     background: rgba(255, 255, 255, 0.07);
-    color: var(--white-color);
   }
 }
 
