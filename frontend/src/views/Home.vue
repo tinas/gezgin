@@ -33,7 +33,7 @@ export default {
           br
           | Car rental in one app
         h3 Nowadays, when we want to rent a bike, scooter or car, we constantly use different applications. So why don't we collect all these in one app?
-        router-link(to="login" class="button")
+        router-link(to="register" class="button")
           | Let's Go!
         .icon-container
           VIcon(axis-y="80" axis-x="300" size="30" icon-name="world")
