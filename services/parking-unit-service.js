@@ -27,7 +27,7 @@ async function findVehicleByIdAndType(id, type) {
 }
 
 class ParkingUnitService extends BaseService {
-  async insertToStation(code, stationId, vehicleId, vehicleType) {
+  async insertToStation({code, stationId, vehicleId, vehicleType}) {
     const station = await stationService.find(stationId)
     let state = State.UNAVAILABLE
     let vehicle = null

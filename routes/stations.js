@@ -40,7 +40,7 @@ router.post('/:stationId/parking-units', async (req, res) => {
   const {stationId} = req.params
   const {code, vehicleId, vehicleType} = req.body
 
-  const parkingUnit = await parkingUnitService.insertToStation(code, stationId, vehicleId, vehicleType)
+  const parkingUnit = await parkingUnitService.insertToStation({code, stationId, vehicleId, vehicleType})
 
   res.send(parkingUnit)
 })
