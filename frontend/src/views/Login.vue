@@ -1,4 +1,6 @@
 <script>
+import {mapActions} from 'vuex'
+
 import VIcon from '@/components/VIcon.vue'
 
 import IconLogo from '@/assets/svg/logo.svg'
@@ -8,6 +10,36 @@ export default {
   components: {
     VIcon,
     IconLogo
+  },
+  data() {
+    return {
+      isValid: true,
+      email: '',
+      errorMessage: ''
+    }
+  },
+  methods: {
+    ...mapActions(['login']),
+
+    async submitLogin() {
+      if (!this.email) {
+        this.isValid = false
+        return
+      }
+
+      await this.login(this.email)
+      this.$router.push('/dashboard')
+    }
+  },
+  watch: {
+    email(val) {
+      if (!val) {
+        this.isValid = false
+        return
+      }
+
+      this.isValid = true
+    }
   }
 }
 </script>
@@ -24,12 +56,13 @@ export default {
         .icon-container
           VIcon(axis-y="-250" axis-x="800" size="30" icon-name="bike")
         .form
-          input(placeholder="name")
-          input(placeholder="password")
-          router-link(to="/dashboard" class="button") Login
+          h4(class="error-message" v-if="!isValid") Please fill email field
+          h4(class="error-message" v-if="errorMessage") {{errorMessage}}
+          input(placeholder="email" type="email" v-model="email")
+          button(class="button" @click="submitLogin") Login
         .question
           p Don't have an account yet?
-            router-link(to="/register" class="link") Sign Up
+            router-link(to="register" class="link") Sign Up
         .icon-container
           VIcon(axis-y="50" axis-x="400" size="30" icon-name="car")
       .image-wrap
@@ -81,6 +114,7 @@ export default {
   border: var(--border) solid var(--primary-color);
   border-radius: var(--border-radius);
   transition: var(--transition);
+  cursor: pointer;
 
   &:hover {
     background: var(--primary-color);
@@ -107,5 +141,11 @@ export default {
 
 .icon-container {
   position: absolute;
+}
+
+.error-message {
+  margin-bottom: 10px;
+  font-weight: var(--bold);
+  color: var(--red-color);
 }
 </style>
