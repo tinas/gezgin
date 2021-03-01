@@ -1,10 +1,9 @@
 <script>
-import {mapState} from 'vuex'
+import {mapActions} from 'vuex'
 
 import TheNavigation from '@/components/TheNavigation.vue'
 import TheDashboardContainer from '@/components/TheDashboardContainer.vue'
 import VLoader from '@/components/VLoader.vue'
-import BookingSelectVehicleCard from '@/components/BookingSelectVehicleCard.vue'
 
 import IconTravel from '@/assets/icons/travel.svg'
 
@@ -14,25 +13,29 @@ export default {
     TheNavigation,
     TheDashboardContainer,
     VLoader,
-    BookingSelectVehicleCard,
 
     IconTravel
   },
   data() {
     return {
-      showLoader: false
+      showLoader: false,
+      parkingUnitCode: ''
     }
   },
   computed: {
-    ...mapState(['selectedVehicle'])
+    disableButton() {
+      return this.parkingUnitCode.length != 6 || this.showLoader
+    }
   },
   methods: {
-    startBooking() {
+    ...mapActions(['startBooking']),
+
+    async book() {
       this.showLoader = true
 
-      setTimeout(() => {
-        this.showLoader = false
-      }, 6000)
+      await this.startBooking(this.parkingUnitCode)
+
+      this.$router.push('/dashboard')
     }
   }
 }
@@ -46,20 +49,15 @@ export default {
         .header
           h1 New Booking
           h2 Select the starting vehicle
-        .select-vehicle
-          BookingSelectVehicleCard(vehicle-name="Bike" icon-name="bike")
-          BookingSelectVehicleCard(vehicle-name="Scooter" icon-name="scooter")
-          BookingSelectVehicleCard(vehicle-name="Car" icon-name="car")
         .form
           .form-input-wrapper
             h2(class="form-title") Parking Unit Code
-            h3 Enter the code of the parking unit the
-              span {{selectedVehicle}}
-              | is connected to
-            input(class="form-input" placeholder="e.g. 366140")
+            h3 Enter the code of the parking unit
+            input(class="form-input" type="number" v-model="parkingUnitCode" placeholder="e.g. 366140")
+            p(class="form-error" v-if="parkingUnitCode.length != 6") please enter a 6 digit number
           .form-button-wrapper
             h2(class="form-title") Start when you feel ready 🤞
-            button(class="start-button" :class="{'loading':showLoader}" :disabled="showLoader" @click="startBooking")
+            button(class="start-button" :disabled="disableButton" @click="book")
               VLoader(v-if="showLoader")
               div(v-else)
                 h2 Start Booking
