@@ -66,9 +66,17 @@ export default {
 
 <style lang="scss" scoped>
 .wrapper {
-  margin-left: 250px;
-  margin-right: 250px;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  margin-left: auto;
+  margin-right: auto;
   color: var(--primary-color);
+
+  @media (min-width: 1280px) {
+    margin-left: 250px;
+    margin-right: 250px;
+  }
 }
 
 .header {
@@ -79,26 +87,32 @@ h2 {
   font-size: 2rem;
 }
 
-.select-vehicle {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 50px;
-}
-
 .selected {
   color: var(--green-color);
 }
 
 .form {
-  display: grid;
-  grid-template-areas: 'input button';
-  margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  row-gap: 50px;
+  margin-top: 100px;
+
+  @media (min-width: 1280px) {
+    display: grid;
+    grid-template-areas: 'input button';
+    margin-top: 100px;
+  }
 }
 
 .form-input-wrapper {
-  grid-column: input;
   align-self: center;
   justify-self: start;
+
+  @media (min-width: 1280px) {
+    grid-column: input;
+    margin-right: 20px;
+  }
 }
 
 .form-title {
@@ -112,6 +126,12 @@ h2 {
   font-size: 2rem;
 }
 
+.form-error {
+  margin-top: 5px;
+  color: var(--red-color);
+  font-weight: var(--bold);
+}
+
 .form-button-wrapper {
   grid-column: button;
   justify-self: end;
@@ -122,6 +142,10 @@ h2 {
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  @media (min-width: 1280px) {
+    grid-column: button;
+  }
 }
 
 .start-button {
@@ -149,22 +173,18 @@ h2 {
   }
 }
 
-.loading {
-  cursor: not-allowed;
-
-  &:hover {
-    background: transparent;
-    color: var(--primary-color);
-  }
-}
-
 .start-button-image {
   width: 50px;
   height: 50px;
   margin-top: 20px;
 }
 
-h3 > span {
-  font-weight: var(--bold);
+button:disabled {
+  cursor: not-allowed;
+
+  &:hover {
+    background: transparent;
+    color: var(--primary-color);
+  }
 }
 </style>
