@@ -15,7 +15,7 @@ export default {
       type: String,
       required: true,
       validator: function(value) {
-        return ['bike', 'scooter', 'car'].indexOf(value) !== -1
+        return ['Bike', 'Scooter', 'Car'].indexOf(value) !== -1
       }
     },
     size: {
@@ -29,9 +29,9 @@ export default {
 <template lang="pug">
   .icon-wrapper
     .icon
-      IconBike(v-if="iconName === 'bike'" :width="size" :height="size")
-      IconCar(v-else-if="iconName === 'car'" :width="size" :height="size")
-      IconScooter(v-else-if="iconName === 'scooter'" :width="size" :height="size")
+      IconBike(v-if="iconName === 'Bike'" :width="size" :height="size")
+      IconCar(v-else-if="iconName === 'Car'" :width="size" :height="size")
+      IconScooter(v-else-if="iconName === 'Scooter'" :width="size" :height="size")
 </template>
 
 <style lang="scss" scoped>
