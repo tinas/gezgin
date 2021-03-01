@@ -1,4 +1,7 @@
 <script>
+import {mapState, mapActions} from 'vuex'
+import {formatDistanceToNowStrict} from 'date-fns'
+
 import TheNavigation from '@/components/TheNavigation.vue'
 import TheDashboardContainer from '@/components/TheDashboardContainer.vue'
 import VLoader from '@/components/VLoader.vue'
@@ -15,18 +18,40 @@ export default {
   data() {
     return {
       isDone: false,
-      showLoader: false
+      showLoader: false,
+      parkingUnitCode: '',
+      bookingCreatedAt: '',
+      totalPrice: 0,
+      totalTime: ''
+    }
+  },
+  computed: {
+    ...mapState(['originParkingUnit']),
+
+    disableButton() {
+      return this.parkingUnitCode.length != 6 || this.showLoader
     }
   },
   methods: {
-    endBooking() {
+    ...mapActions(['fetchCurrentBooking', 'finishBooking']),
+
+    async endBooking() {
       this.showLoader = true
 
-      setTimeout(() => {
-        this.isDone = true
-        this.showLoader = false
-      }, 6000)
+      this.totalTime = formatDistanceToNowStrict(this.bookingCreatedAt, {unit: 'minute'})
+      const calculateTotalPrice = this.totalTime.split(' ')[0] * this.originParkingUnit.vehicle.pricePerMinute
+      this.totalPrice = calculateTotalPrice.toFixed(2)
+
+      await this.finishBooking({parkingUnitCode: this.parkingUnitCode, totalPrice: this.totalPrice})
+
+      this.isDone = true
+      this.showLoader = false
     }
+  },
+  async mounted() {
+    const request = await this.fetchCurrentBooking()
+
+    this.bookingCreatedAt = new Date(request.createdAt)
   }
 }
 </script>
@@ -43,18 +68,19 @@ export default {
           .form-input-wrapper
             h2(class="form-title") Parking Unit Code
             h3 Enter the code of the parking unit the car is connected to
-            input(class="form-input" placeholder="e.g. 366140")
+            input(class="form-input" type="number" v-model="parkingUnitCode" placeholder="e.g. 366140")
+            p(class="form-error" v-if="parkingUnitCode.length != 6") please enter a 6 digit number
           .form-button-wrapper(v-if="isDone")
             h2(class="form-title") Booking completed!
             .results
-              h2 Amount:
-                span(class="result-value") 5$
-              h2 Time:
-                span(class="result-value") 1 hour
+              h3 Total Price:
+                span(class="result-value") ${{totalPrice}}
+              h3 Total Time:
+                span(class="result-value") {{totalTime}}
             router-link(to="/dashboard" class="dashboard-button") Dashboard
           .form-button-wrapper(v-else)
             h2(class="form-title") End the booking and view the drive results 👌
-            button(class="finish-button" :class="{'loading':showLoader}" :disabled="showLoader" @click="endBooking")
+            button(class="finish-button" :disabled="disableButton" @click="endBooking")
               VLoader(v-if="showLoader")
               div(v-else)
                 h2 End Booking
