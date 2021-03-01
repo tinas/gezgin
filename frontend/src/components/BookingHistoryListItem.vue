@@ -1,4 +1,6 @@
 <script>
+import {format, formatDistanceStrict, formatDistanceToNowStrict} from 'date-fns'
+
 import VIconStroke from '@/components/VIconStroke.vue'
 
 export default {
@@ -6,12 +8,31 @@ export default {
   components: {
     VIconStroke
   },
+  props: {
+    booking: {
+      type: Object,
+      required: true
+    }
+  },
   data() {
     return {
       isActive: false
     }
   },
-
+  computed: {
+    createdAt() {
+      return format(new Date(this.booking.createdAt), 'yyyy-MM-dd / HH:mm')
+    },
+    updatedAt() {
+      return format(new Date(this.booking.updatedAt), 'yyyy-MM-dd / HH:mm')
+    },
+    elapsedTime() {
+      return formatDistanceToNowStrict(new Date(this.booking.createdAt), {addSuffix: true})
+    },
+    totalbookingTime() {
+      return formatDistanceStrict(new Date(this.booking.updatedAt), new Date(this.booking.createdAt), {unit: 'minute'})
+    }
+  },
   methods: {
     setActive() {
       this.isActive = !this.isActive
@@ -24,25 +45,35 @@ export default {
   .list-item-container(@click="setActive" :class="{'list-item-container-active':isActive}")
     div(v-if="isActive" class="expand")
       .booking-info
-        h2(class="vehicle-name") Razor E300
+        h2(class="route") {{booking.origin.name}} > {{booking.destination.name}}
         .booking-info-line
-          h3(class="line-text") Starting Station:
-            h3 Kadıköy
-          h3(class="line-text") Finished Station:
-            h3 Tuzla
+          h2 Route
+          .line-wrapper
+            h3(class="line-text") Starting Station:
+              h3 {{booking.origin.name}}
+            h3(class="line-text") Finished Station:
+              h3 {{booking.destination.name}}
         .booking-info-line
-          h3(class="line-text") Total Time:
-            h3 30 minutes
-          h3(class="line-text") Total Amount:
-            h3 8$
+          h2 Date
+          .line-wrapper
+            h3(class="line-text") Starting Date:
+              h3 {{createdAt}}
+            h3(class="line-text") Due Date:
+              h3 {{updatedAt}}
+        .booking-info-line
+          h2 Totals
+          .line-wrapper
+            h3(class="line-text") Total Time:
+              h3 {{totalbookingTime}}
+            h3(class="line-text") Total Price:
+              h3 ${{booking.totalPrice}}
       .vehicle-icon
-        VIconStroke(icon-name="bike" icon-size="60")
+        VIconStroke(:icon-name="booking.parkingUnit.vehicleType" icon-size="150")
     div(v-else class="collapse")
       .vehicle
-        VIconStroke(icon-name="bike" icon-size="20" padding="10")
-        h2 Razor E300
-      .route
-        h2 Kadıköy > Tuzla
+        VIconStroke(:icon-name="booking.parkingUnit.vehicleType" icon-size="20" padding="10")
+        h2 {{booking.origin.name}} > {{booking.destination.name}}
+      h2 {{elapsedTime}}
 </template>
 
 <style lang="scss" scoped>
@@ -51,11 +82,6 @@ export default {
   cursor: pointer;
   background: var(--white-color);
   border-radius: var(--border-radius);
-  transition: var(--transition);
-
-  &:hover {
-    color: var(--primary-80-color);
-  }
 }
 
 .list-item-container-active {
@@ -65,17 +91,27 @@ export default {
 .expand {
   display: grid;
   grid-template-areas: 'text icon';
-  grid-template-columns: 1fr 200px;
+  grid-template-columns: 1fr 300px;
 }
 
 .booking-info {
   grid-column: text;
+}
 
-  h2 {
-    color: var(--primary-color);
-    font-weight: var(--black);
-    font-size: 2.2rem;
+.booking-info-line {
+  display: flex;
+  flex-direction: column;
+  column-gap: 50px;
+
+  & + .booking-info-line {
+    margin-top: 20px;
   }
+}
+
+.line-wrapper {
+  display: flex;
+  column-gap: 50px;
+  margin-top: 10px;
 }
 
 .vehicle {
@@ -84,15 +120,17 @@ export default {
   column-gap: 20px;
 }
 
-.vehicle-name {
-  margin-bottom: 20px;
+.route {
+  margin-bottom: 30px;
+  color: var(--primary-color);
+  font-weight: var(--black);
 }
 
 .vehicle-icon {
   grid-column: icon;
-  justify-self: end;
+  justify-self: center;
   align-self: center;
-  color: var(--primary-color);
+  color: var(--primary-80-color);
 }
 
 .content {
@@ -111,19 +149,15 @@ export default {
   }
 }
 
-.booking-info-line {
-  display: flex;
-  column-gap: 50px;
-
-  & + .booking-info-line {
-    margin-top: 20px;
-  }
-}
-
 .collapse {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  transition: var(--transition);
+
+  &:hover {
+    color: var(--primary-color);
+  }
 }
 
 h2 {
