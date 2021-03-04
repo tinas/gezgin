@@ -38,7 +38,7 @@ export default {
         const parkingUnit = await this.fetchParkingUnitByCode(this.parkingUnitCode)
 
         if (parkingUnit.state == 1) {
-          this.errorMessage = 'This station is currently in use'
+          this.errorMessage = 'This station is currently unavailable'
           return
         }
 
