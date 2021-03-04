@@ -55,6 +55,15 @@ const routes = [
       if (!store.state.passengerId) return next('/login')
       return next()
     }
+  },
+  {
+    path: '/stations',
+    name: 'Stations',
+    component: () => import('../views/Stations.vue'),
+    beforeEnter(to, from, next) {
+      if (!store.state.passengerId) return next('/login')
+      return next()
+    }
   }
 ]
 

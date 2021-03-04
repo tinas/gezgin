@@ -125,6 +125,13 @@ export default new Vuex.Store({
       commit(Mutations.SET_PASSENGER_NAME, null)
       commit(Mutations.SET_ORIGIN_PARKING_UNIT, null)
       commit(Mutations.SET_BOOKING_HISTORY, null)
+    },
+
+    //stations
+    async fetchStations() {
+      const stations = await axios.get('/stations')
+
+      return stations.data
     }
   },
   modules: {}
