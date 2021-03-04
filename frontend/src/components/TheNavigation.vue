@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     ...mapActions(['logout']),
-    submitLogin() {
+    submitLogout() {
       this.logout()
 
       this.$router.push('/')
@@ -48,7 +48,7 @@ export default {
       h3(class="user-name") {{passengerName}}
       .avatar
         h3 {{avatarText}}
-      button(class="logout" @click="submitLogin") Logout
+      button(class="logout" @click="submitLogout") Logout
 </template>
 
 <style lang="scss" scoped>
