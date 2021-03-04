@@ -42,7 +42,8 @@ export default {
   .nav
     IconLogo(width="120" height="70")
     .menu
-      router-link(to="/dashboard" class="menu-item") Dashboard
+      router-link(to="dashboard" class="menu-item") Dashboard
+      router-link(to="stations" class="menu-item") Stations
     .user
       h3(class="user-name") {{passengerName}}
       .avatar
