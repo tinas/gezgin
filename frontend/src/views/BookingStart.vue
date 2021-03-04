@@ -19,7 +19,8 @@ export default {
   data() {
     return {
       showLoader: false,
-      parkingUnitCode: ''
+      parkingUnitCode: '',
+      errorMessage: ''
     }
   },
   computed: {
@@ -28,14 +29,32 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['startBooking']),
+    ...mapActions(['fetchParkingUnitByCode', 'startBooking']),
 
     async book() {
       this.showLoader = true
 
-      await this.startBooking(this.parkingUnitCode)
+      try {
+        const parkingUnit = await this.fetchParkingUnitByCode(this.parkingUnitCode)
 
-      this.$router.push('/dashboard')
+        if (parkingUnit.state == 1) {
+          this.errorMessage = 'This station is currently in use'
+          return
+        }
+
+        await this.startBooking(parkingUnit._id)
+
+        this.$router.push('/dashboard')
+      } catch (e) {
+        this.errorMessage = e.response?.data?.message ?? e.message ?? 'An unknown error occured'
+      } finally {
+        this.showLoader = false
+      }
+    }
+  },
+  watch: {
+    parkingUnitCode(newVal) {
+      this.errorMessage = ''
     }
   }
 }
@@ -55,6 +74,7 @@ export default {
             h3 Enter the code of the parking unit
             input(class="form-input" type="number" v-model="parkingUnitCode" placeholder="e.g. 366140")
             p(class="form-error" v-if="parkingUnitCode.length != 6") please enter a 6 digit number
+            p(class="form-error" v-if="errorMessage") {{errorMessage}}
           .form-button-wrapper
             h2(class="form-title") Start when you feel ready 🤞
             button(class="start-button" :disabled="disableButton" @click="book")

@@ -14,7 +14,8 @@ const Mutations = {
 }
 
 const Actions = {
-  FETCH_PARKING_UNIT_BY_CODE: 'fetchParkingUnitByCode'
+  FETCH_PARKING_UNIT_BY_CODE: 'fetchParkingUnitByCode',
+  SET_ORIGIN_PARKING_UNIT: 'setOriginParkingUnit'
 }
 
 export default new Vuex.Store({
@@ -39,6 +40,9 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    setOriginParkingUnit({commit}, parkingUnit) {
+      commit(Mutations.SET_ORIGIN_PARKING_UNIT, parkingUnit)
+    },
     async fetchCurrentBooking({state, commit, dispatch}) {
       const request = await axios.get(`/passengers/${state.passengerId}`)
 
@@ -58,27 +62,28 @@ export default new Vuex.Store({
 
       commit(Mutations.SET_BOOKING_HISTORY, request.data.bookings?.reverse())
     },
-    /* eslint-disable */
-    async fetchParkingUnitByCode({commit}, parkingUnitCode) {
-      const request = await axios.get(`/parking-units/${parkingUnitCode}`)
 
-      return request.data[0]
+    async fetchParkingUnitByCode({state}, parkingUnitCode) {
+      try {
+        const parkingUnit = await axios.get(`/parking-units/${parkingUnitCode}`)
+
+        return parkingUnit.data[0]
+      } catch (e) {
+        throw e
+      }
     },
-    /* eslint-enable */
-    async startBooking({state, commit, dispatch}, parkingUnitCode) {
-      const parkingUnit = await dispatch(Actions.FETCH_PARKING_UNIT_BY_CODE, parkingUnitCode)
 
-      commit(Mutations.SET_ORIGIN_PARKING_UNIT, parkingUnit)
-
+    async startBooking({state, dispatch}, parkingUnitId) {
       await axios.post(`/passengers/${state.passengerId}/current-booking`, {
-        parkingUnitId: parkingUnit._id
+        parkingUnitId
       })
-    },
-    async finishBooking({state, dispatch}, {parkingUnitCode, totalPrice}) {
-      const vehicleId = state.originParkingUnit.vehicle._id
-      const destinationParkingUnit = await dispatch(Actions.FETCH_PARKING_UNIT_BY_CODE, parkingUnitCode)
 
-      if (!destinationParkingUnit) return
+      const parkingUnit = await axios.patch(`/parking-units/${parkingUnitId}/state`, {state: 1})
+
+      dispatch(Actions.SET_ORIGIN_PARKING_UNIT, parkingUnit)
+    },
+    async finishBooking({state}, {destinationParkingUnit, totalPrice}) {
+      const vehicleId = state.originParkingUnit.vehicle._id
 
       await axios.patch(`/parking-units/${state.originParkingUnit._id}`, {
         vehicleType: state.originParkingUnit.vehicleType
@@ -88,6 +93,8 @@ export default new Vuex.Store({
         vehicleId,
         vehicleType: destinationParkingUnit.vehicleType
       })
+
+      await axios.patch(`/parking-units/${destinationParkingUnit._id}/state`, {state: 0})
 
       const booking = await axios.post(`/passengers/${state.passengerId}/bookings`, {
         destinationId: destinationParkingUnit.station,

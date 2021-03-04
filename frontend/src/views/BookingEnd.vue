@@ -22,7 +22,8 @@ export default {
       parkingUnitCode: '',
       bookingCreatedAt: '',
       totalPrice: 0,
-      totalTime: ''
+      totalTime: '',
+      errorMessage: ''
     }
   },
   computed: {
@@ -33,19 +34,41 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchCurrentBooking', 'finishBooking']),
+    ...mapActions(['fetchCurrentBooking', 'fetchParkingUnitByCode', 'finishBooking']),
 
     async endBooking() {
       this.showLoader = true
 
-      this.totalTime = formatDistanceToNowStrict(this.bookingCreatedAt, {unit: 'minute'})
-      const calculateTotalPrice = this.totalTime.split(' ')[0] * this.originParkingUnit.vehicle.pricePerMinute
-      this.totalPrice = calculateTotalPrice.toFixed(2)
+      try {
+        const parkingUnit = await this.fetchParkingUnitByCode(this.parkingUnitCode)
 
-      await this.finishBooking({parkingUnitCode: this.parkingUnitCode, totalPrice: this.totalPrice})
+        if (parkingUnit.vehicleType != this.originParkingUnit.vehicleType) {
+          this.errorMessage = `Enter a parking unit code belonging to the ${this.originParkingUnit.vehicleType} category`
+          return
+        }
 
-      this.isDone = true
-      this.showLoader = false
+        if (parkingUnit.state == 0) {
+          this.errorMessage = `There is already a ${parkingUnit.vehicleType} at this parking station`
+          return
+        }
+
+        this.totalTime = formatDistanceToNowStrict(this.bookingCreatedAt, {unit: 'minute'})
+        const calculateTotalPrice = this.totalTime.split(' ')[0] * this.originParkingUnit.vehicle.pricePerMinute
+        this.totalPrice = calculateTotalPrice.toFixed(2)
+
+        await this.finishBooking({destinationParkingUnit: parkingUnit, totalPrice: this.totalPrice})
+
+        this.isDone = true
+      } catch (e) {
+        this.errorMessage = e.response?.data?.message ?? e.message ?? 'An unknown error occured'
+      } finally {
+        this.showLoader = false
+      }
+    }
+  },
+  watch: {
+    parkingUnitCode(newVal) {
+      this.errorMessage = ''
     }
   },
   async mounted() {
@@ -70,6 +93,7 @@ export default {
             h3 Enter the code of the parking unit the car is connected to
             input(class="form-input" type="number" v-model="parkingUnitCode" placeholder="e.g. 366140")
             p(class="form-error" v-if="parkingUnitCode.length != 6") please enter a 6 digit number
+            p(class="form-error" v-if="errorMessage") {{errorMessage}}
           .form-button-wrapper(v-if="isDone")
             h2(class="form-title") Booking completed!
             .results
