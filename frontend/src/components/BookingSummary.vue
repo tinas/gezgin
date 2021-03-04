@@ -37,7 +37,7 @@ export default {
   height: auto;
   padding-left: 20px;
   padding-right: 20px;
-  background: var(--sidebar-bg-color);
+  background: var(--card-bg-color);
   border-radius: var(--border-radius);
 }
 

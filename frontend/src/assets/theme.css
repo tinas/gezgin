@@ -24,7 +24,7 @@
   --skeleton-second-color: #d0d0d0;
   --dashboard-bg: #f7f8fc;
   --bg-color: #fcfcfc;
-  --sidebar-bg-color: #f9fafd;
+  --card-bg-color: #f9fafd;
   --avatar-bg-color: #d0e1ee;
   --divider-color: #e0e0e0;
   --border: 2px;
@@ -32,6 +32,7 @@
   --border-radius-999: 999px;
   --box-shadow: 0px 1px 14px rgba(19, 56, 94, 0.6);
   --box-shadow-25: 0 1px 10px rgba(19, 56, 94, 0.25);
+  --box-shadow-1: 0 1px 10px rgba(19, 56, 94, 0.1);
   --transition: 0.2s;
 }
 
