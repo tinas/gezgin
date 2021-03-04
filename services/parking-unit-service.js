@@ -47,14 +47,12 @@ class ParkingUnitService extends BaseService {
 
   async updateVehicle(parkingUnitId, vehicleId, vehicleType) {
     let vehicle = null
-    let state = State.UNAVAILABLE
 
     if (vehicleId != null) {
       vehicle = await findVehicleByIdAndType(vehicleId, vehicleType)
-      state = State.AVAILABLE
     }
 
-    const parkingUnit = await this.update(parkingUnitId, {vehicle, state})
+    const parkingUnit = await this.update(parkingUnitId, {vehicle})
 
     return parkingUnit
   }
