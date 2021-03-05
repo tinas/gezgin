@@ -1,0 +1,9 @@
+__mocks__
+lib/__tests__
+node_modules
+.gitattributes
+.gitignore
+jest.config.js
+requests.http
+Dockerfile
+.dockerignore

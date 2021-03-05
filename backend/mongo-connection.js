@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
 const seedDatase = require('./lib/seedDatabase')
 
-mongoose.connect('mongodb://localhost/gezgin', {
+const connectionString = process.env.MONGODB_CONNECTION_STRING || 'mongodb://mongodb/gezgin'
+
+mongoose.connect(connectionString, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false

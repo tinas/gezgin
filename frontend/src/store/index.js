@@ -2,9 +2,9 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import axios from 'axios'
 
-Vue.use(Vuex)
+axios.defaults.baseURL = process.env.GEZGIN_APP_API_URL || 'http://localhost:3000'
 
-axios.defaults.baseURL = 'http://localhost:3000'
+Vue.use(Vuex)
 
 const Mutations = {
   SET_PASSENGER_ID: 'SET_PASSENGER_ID',
