@@ -92,7 +92,7 @@ export default new Vuex.Store({
 
       await axios.patch(`/parking-units/${destinationParkingUnit._id}/state`, {state: 0})
 
-      if (originParkingUnit._id == destinationParkingUnit._id) return booking
+      if (state.originParkingUnit._id == destinationParkingUnit._id) return booking
 
       await axios.patch(`/parking-units/${state.originParkingUnit._id}`, {
         vehicleType: state.originParkingUnit.vehicleType
@@ -114,13 +114,16 @@ export default new Vuex.Store({
       commit(Mutations.SET_PASSENGER_NAME, request.data.name)
     },
     async login({commit}, email) {
-      const request = await axios.post('/passengers/login', {email})
+      try {
+        const request = await axios.post('/passengers/login', {email})
 
-      const passenger = request.data[0]
-      if (!passenger) return
+        const passenger = request.data[0]
 
-      commit(Mutations.SET_PASSENGER_ID, passenger._id)
-      commit(Mutations.SET_PASSENGER_NAME, passenger.name)
+        commit(Mutations.SET_PASSENGER_ID, passenger._id)
+        commit(Mutations.SET_PASSENGER_NAME, passenger.name)
+      } catch (e) {
+        throw e
+      }
     },
     logout({commit}) {
       commit(Mutations.SET_PASSENGER_ID, null)

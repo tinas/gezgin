@@ -27,12 +27,19 @@ export default {
         return
       }
 
-      await this.login(this.email)
-      this.$router.push('/dashboard')
+      try {
+        await this.login(this.email)
+
+        this.$router.push('/dashboard')
+      } catch (e) {
+        this.errorMessage = e.response?.data?.message ?? e.message ?? 'An unknown error occured'
+      }
     }
   },
   watch: {
     email(val) {
+      this.errorMessage = ''
+
       if (!val) {
         this.isValid = false
         return

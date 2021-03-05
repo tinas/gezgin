@@ -59,10 +59,12 @@ router.post('/:passengerId/bookings', async (req, res) => {
   res.send(booking)
 })
 
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
   const {email} = req.body
 
   const passenger = await passengerService.findBy('email', email)
+
+  if (!passenger.length) return next(new Error('Passenger not found'))
 
   res.send(passenger)
 })
