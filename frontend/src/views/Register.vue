@@ -2,6 +2,7 @@
 import {mapActions} from 'vuex'
 
 import VIcon from '@/components/VIcon.vue'
+import VLoader from '@/components/VLoader.vue'
 
 import IconLogo from '@/assets/svg/logo.svg'
 
@@ -9,10 +10,12 @@ export default {
   name: 'Register',
   components: {
     VIcon,
+    VLoader,
     IconLogo
   },
   data() {
     return {
+      showLoader: false,
       isValid: true,
       name: '',
       email: '',
@@ -27,13 +30,9 @@ export default {
         return
       }
 
-      const passengerToCreate = {
-        name: this.name,
-        email: this.email,
-        phone: this.phone
-      }
+      this.showLoader = true
 
-      await this.createPassenger(passengerToCreate)
+      await this.createPassenger({name: this.name, email: this.email, phone: this.phone})
 
       this.$router.push('/dashboard')
     }
@@ -83,7 +82,9 @@ export default {
           input(placeholder="name" v-model="name")
           input(placeholder="email" type="email" v-model="email")
           input(placeholder="phone" type="tel" v-model="phone")
-          button(class="button" @click="submitPassenger") Register
+          button(class="button" @click="submitPassenger" :disabled="showLoader")
+            VLoader(v-if="showLoader" font-size="20")
+            p(v-else) Register
         .question
           p Already have an account?
             router-link(to="/login" class="link") Sign In
@@ -171,5 +172,14 @@ export default {
   margin-bottom: 10px;
   font-weight: var(--bold);
   color: var(--red-color);
+}
+
+button:disabled {
+  cursor: not-allowed;
+
+  &:hover {
+    background: transparent;
+    color: var(--primary-color);
+  }
 }
 </style>

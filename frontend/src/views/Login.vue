@@ -2,6 +2,7 @@
 import {mapActions} from 'vuex'
 
 import VIcon from '@/components/VIcon.vue'
+import VLoader from '@/components/VLoader.vue'
 
 import IconLogo from '@/assets/svg/logo.svg'
 
@@ -9,10 +10,12 @@ export default {
   name: 'Login',
   components: {
     VIcon,
+    VLoader,
     IconLogo
   },
   data() {
     return {
+      showLoader: false,
       isValid: true,
       email: '',
       errorMessage: ''
@@ -27,12 +30,16 @@ export default {
         return
       }
 
+      this.showLoader = true
+
       try {
         await this.login(this.email)
 
         this.$router.push('/dashboard')
       } catch (e) {
         this.errorMessage = e.response?.data?.message ?? e.message ?? 'An unknown error occured'
+      } finally {
+        this.showLoader = false
       }
     }
   },
@@ -66,7 +73,9 @@ export default {
           h4(class="error-message" v-if="!isValid") Please fill email field
           h4(class="error-message" v-if="errorMessage") {{errorMessage}}
           input(placeholder="email" type="email" v-model="email")
-          button(class="button" @click="submitLogin") Login
+          button(class="button" @click="submitLogin" :disabled="showLoader")
+            VLoader(v-if="showLoader" font-size="20")
+            p(v-else) Login
         .question
           p Don't have an account yet?
             router-link(to="register" class="link") Sign Up
@@ -154,5 +163,14 @@ export default {
   margin-bottom: 10px;
   font-weight: var(--bold);
   color: var(--red-color);
+}
+
+button:disabled {
+  cursor: not-allowed;
+
+  &:hover {
+    background: transparent;
+    color: var(--primary-color);
+  }
 }
 </style>
