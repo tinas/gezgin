@@ -6,16 +6,22 @@ import TheDashboardContainer from '@/components/TheDashboardContainer.vue'
 import VIconStroke from '@/components/VIconStroke.vue'
 import StationDetail from '@/components/StationDetail.vue'
 
+import StationListSkeleton from '@/components/StationListSkeleton.vue'
+import StationDetailSkeleton from '@/components/StationDetailSkeleton.vue'
+
 export default {
   name: 'Stations',
   components: {
     TheNavigation,
     TheDashboardContainer,
     VIconStroke,
-    StationDetail
+    StationDetail,
+    StationListSkeleton,
+    StationDetailSkeleton
   },
   data() {
     return {
+      isLoading: true,
       stations: [],
       selectedStation: null
     }
@@ -35,6 +41,7 @@ export default {
     if (this.stations.length == 0) return
 
     this.selectedStation = this.stations[0]
+    this.isLoading = false
   }
 }
 </script>
@@ -47,7 +54,8 @@ export default {
         .station-list
           h1 Station List
           h2 Track the instant status of stations
-          .station-list-wrapper
+          StationListSkeleton(v-if="isLoading")
+          .station-list-wrapper(v-else)
             .staion-list-item(
                 v-for="station in stations"
                 :key="station._id"
@@ -59,7 +67,9 @@ export default {
                   VIconStroke(v-if="isThere(station, 'Bike')" icon-name="Bike" icon-size="20" padding="10")
                   VIconStroke(v-if="isThere(station, 'Scooter')" icon-name="Scooter" icon-size="20" padding="10")
                   VIconStroke(v-if="isThere(station, 'Car')" icon-name="Car" icon-size="20" padding="10")
-        StationDetail(v-if="selectedStation" :station="selectedStation")
+        StationDetailSkeleton(v-if="isLoading")
+        div(v-else)
+          StationDetail(v-if="selectedStation" :station="selectedStation")
 </template>
 
 <style lang="scss" scoped>
