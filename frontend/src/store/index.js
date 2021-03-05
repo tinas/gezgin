@@ -85,6 +85,15 @@ export default new Vuex.Store({
     async finishBooking({state}, {destinationParkingUnit, totalPrice}) {
       const vehicleId = state.originParkingUnit.vehicle._id
 
+      const booking = await axios.post(`/passengers/${state.passengerId}/bookings`, {
+        destinationId: destinationParkingUnit.station,
+        totalPrice
+      })
+
+      await axios.patch(`/parking-units/${destinationParkingUnit._id}/state`, {state: 0})
+
+      if (originParkingUnit._id == destinationParkingUnit._id) return booking
+
       await axios.patch(`/parking-units/${state.originParkingUnit._id}`, {
         vehicleType: state.originParkingUnit.vehicleType
       })
@@ -92,13 +101,6 @@ export default new Vuex.Store({
       await axios.patch(`/parking-units/${destinationParkingUnit._id}`, {
         vehicleId,
         vehicleType: destinationParkingUnit.vehicleType
-      })
-
-      await axios.patch(`/parking-units/${destinationParkingUnit._id}/state`, {state: 0})
-
-      const booking = await axios.post(`/passengers/${state.passengerId}/bookings`, {
-        destinationId: destinationParkingUnit.station,
-        totalPrice
       })
 
       return booking
